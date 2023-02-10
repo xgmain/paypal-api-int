@@ -4,12 +4,12 @@ namespace PayPal\Request;
 
 class AuthTokenRequest extends PayPalRequest implements RequestTokenInterface
 {
-    public function setUri(): string
+    public function getUri(): string
     {
         return $this->uri.'/v1/oauth2/token';
     }
 
-    public function setBody(): string
+    public function getBody(): string
     {
         return 'grant_type=client_credentials';
     }

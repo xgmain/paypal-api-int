@@ -4,23 +4,21 @@ namespace PayPal\Services;
 
 use Exception;
 use PayPal\HttpClient\PayPalClient;
-use PayPal\Request\RequestTokenInterface;
 use PayPal\Utils\Validation;
 
 class Auth
 {
     private $client;
-    private $request;
 
-    public function __construct(RequestTokenInterface $request)
+    public function __construct()
     {
         $this->client = new PayPalClient;
-        $this->request = $request;
     }
 
     public function getAuthToken(): string
     {
-        $response = $this->client->post($this->request->setUri(), $this->request->setBody());
+        // $response = $this->client->post($this->request->setUri(), $this->request->setBody());
+        $response = $this->client->post();
 
         $this->validateStatusCode($response);
 
@@ -33,7 +31,8 @@ class Auth
 
     public function revokeAuthToken(string $token): bool
     {
-        $response = $this->client->post($this->request->setUri(), $this->request->setBody($token));
+        // $response = $this->client->post($this->request->setUri(), $this->request->setBody($token));
+        $response = $this->client->post($token);
 
         $this->validateStatusCode($response);
         

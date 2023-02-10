@@ -6,7 +6,9 @@ use Exception;
 use PayPal\HttpClient\PayPalConfig;
 use PayPal\Config\GlobleConfig;
 use GuzzleHttp\Client;
+use PayPal\Request\AuthTokenRequest;
 use PayPal\Request\PayPalRequest;
+use PayPal\Request\RevokeTokenRequest;
 
 class PayPalClient
 {
@@ -43,8 +45,17 @@ class PayPalClient
         }
 
         $request = new PayPalRequest;
-        list($uri, $body) = $params;
-        $context = $request->setContext($body);
+
+        if (count($params) === 0) {
+            $request = new AuthTokenRequest;
+            $body = $request->getBody();
+        } else {
+            $request = new RevokeTokenRequest;
+            $body = $request->getBody(...$params);
+        }
+
+        $uri = $request->getUri();
+        $context = $request->getContext($body);
 
         return $this->httpClient->request(strtoupper($method), $uri, $context);
     }

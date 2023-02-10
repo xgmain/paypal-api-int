@@ -4,6 +4,6 @@ namespace PayPal\Request;
 
 Interface RequestTokenInterface
 {
-    public function setUri(): string;
-    public function setBody(): string;
+    public function getUri(): string;
+    public function getBody(): string;
 }

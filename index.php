@@ -2,14 +2,12 @@
 require("./vendor/autoload.php");
 
 use PayPal\Services\Auth;
-use PayPal\Request\AuthTokenRequest;
-use PayPal\Request\RevokeTokenRequest;
 
-$auth = new Auth(new AuthTokenRequest);
+$auth = new Auth;
 $token = $auth->getAuthToken();
 echo $token. PHP_EOL;
 
-$revokeAuth = new Auth(new RevokeTokenRequest);
+$revokeAuth = new Auth;
 $revoke = $auth->revokeAuthToken($token);
 
 echo $revoke. PHP_EOL;

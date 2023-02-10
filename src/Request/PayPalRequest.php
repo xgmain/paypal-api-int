@@ -26,7 +26,7 @@ class PayPalRequest
         $this->clientSecret = PayPalConfig::SETTINGS[$this->mode]['client_secret'];
     }
 
-    private function setHeaders(): array
+    private function getHeaders(): array
     {
         return [
             'Accept' => 'application/json',
@@ -35,7 +35,7 @@ class PayPalRequest
         ];
     }
 
-    private function setAuth(): array
+    private function getAuth(): array
     {
         return [
             $this->clientId,
@@ -44,12 +44,12 @@ class PayPalRequest
         ];
     }
 
-    public function setContext(string $body): array
+    public function getContext(string $body): array
     {
         return [
-            'header' => $this->setHeaders(),
+            'header' => $this->getHeaders(),
             'body' => $body,
-            'auth' => $this->setAuth(),
+            'auth' => $this->getAuth(),
         ];
     }
 
