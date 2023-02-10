@@ -7,10 +7,11 @@ $auth = new Auth;
 $token = $auth->getAuthToken();
 echo $token. PHP_EOL;
 
-$revokeAuth = new Auth;
 $revoke = $auth->revokeAuthToken($token);
-
 echo $revoke. PHP_EOL;
+
+$info = $auth->getUserInfo();
+echo sprintf("userID is %s" .PHP_EOL. "Sub is %s", $info['id'], $info['sub']). PHP_EOL;
 
 // use GuzzleHttp\Client;
 

@@ -13,4 +13,9 @@ class RevokeTokenRequest extends PayPalRequest implements RequestTokenInterface
     {
         return "token=".$token."&token_type_hint=ACCESS_TOKEN";
     }
+
+    public function getContext(string $body): array
+    {
+        return parent::getContext($body);
+    }
 }

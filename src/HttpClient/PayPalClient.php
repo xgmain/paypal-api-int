@@ -6,9 +6,10 @@ use Exception;
 use PayPal\HttpClient\PayPalConfig;
 use PayPal\Config\GlobleConfig;
 use GuzzleHttp\Client;
+use PayPal\Request\RequestTokenInterface;
 use PayPal\Request\AuthTokenRequest;
-use PayPal\Request\PayPalRequest;
 use PayPal\Request\RevokeTokenRequest;
+use PayPal\Request\UserInfoRequest;
 
 class PayPalClient
 {
@@ -20,12 +21,26 @@ class PayPalClient
     private $clientSecret;
     private $appID;
     private $httpClient;
+    private $request;
 
     public function __construct()
     {
         $this->mode = PayPalConfig::SETTINGS['mode'];
         $this->setConfig(PayPalConfig::SETTINGS[$this->mode]);
         $this->httpClient = new Client();
+    }
+
+    public function __call(string $method, array $params)
+    {
+        if (!in_array($method, GlobleConfig::ALLOWMETHOD)) {
+            throw new Exception('Bad method call');
+        }
+
+        $body = $this->evaluateBody($params);
+        $uri = $this->request->getUri();
+        $context = $this->request->getContext($body);
+        // var_dump($uri, $context);
+        return $this->httpClient->request(strtoupper($method), $uri, $context);
     }
 
     private function setConfig(array $setting): void
@@ -38,25 +53,27 @@ class PayPalClient
         $this->appID = $setting['app_id']; 
     }
 
-    public function __call(string $method, array $params)
+    private function evaluateBody(array $params): string
     {
-        if (!in_array($method, GlobleConfig::ALLOWMETHOD)) {
-            throw new Exception('Bad method call');
+        if ($this->request instanceof AuthTokenRequest) {
+            $body = $this->request->getBody();
+        } 
+        
+        if ($this->request instanceof RevokeTokenRequest) {
+            $body = $this->request->getBody(...$params);
         }
 
-        $request = new PayPalRequest;
-
-        if (count($params) === 0) {
-            $request = new AuthTokenRequest;
-            $body = $request->getBody();
-        } else {
-            $request = new RevokeTokenRequest;
-            $body = $request->getBody(...$params);
+        if ($this->request instanceof UserInfoRequest) {
+            $body = $this->request->getBody();
         }
 
-        $uri = $request->getUri();
-        $context = $request->getContext($body);
+        return $body;
+    }
 
-        return $this->httpClient->request(strtoupper($method), $uri, $context);
+    public function setRequest(RequestTokenInterface $request): self
+    {
+        $this->request = $request;
+
+        return $this;
     }
 }
