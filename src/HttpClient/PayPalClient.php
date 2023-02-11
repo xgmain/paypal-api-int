@@ -10,6 +10,7 @@ use PayPal\Request\RequestTokenInterface;
 use PayPal\Request\AuthTokenRequest;
 use PayPal\Request\RevokeTokenRequest;
 use PayPal\Request\UserInfoRequest;
+use PayPal\Request\GenerateTokenRequest;
 
 class PayPalClient
 {
@@ -39,7 +40,7 @@ class PayPalClient
         $body = $this->evaluateBody($params);
         $uri = $this->request->getUri();
         $context = $this->request->getContext($body);
-        // var_dump($uri, $context);
+        var_dump($uri, $context);
         return $this->httpClient->request(strtoupper($method), $uri, $context);
     }
 
@@ -64,6 +65,10 @@ class PayPalClient
         }
 
         if ($this->request instanceof UserInfoRequest) {
+            $body = $this->request->getBody();
+        }
+
+        if ($this->request instanceof GenerateTokenRequest) {
             $body = $this->request->getBody();
         }
 

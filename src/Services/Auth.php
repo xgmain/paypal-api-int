@@ -2,12 +2,12 @@
 
 namespace PayPal\Services;
 
-use Exception;
 use PayPal\HttpClient\PayPalClient;
 use PayPal\Utils\Validation;
 use PayPal\Request\AuthTokenRequest;
 use PayPal\Request\RevokeTokenRequest;
 use PayPal\Request\UserInfoRequest;
+use PayPal\Request\GenerateTokenRequest;
 
 class Auth
 {
@@ -22,7 +22,7 @@ class Auth
     {
         $response = $this->client->setRequest(new AuthTokenRequest)->post();
 
-        $this->validateStatusCode($response);
+        Validation::validateStatusCode($response);
 
         $data = json_decode($response->getBody(), true);
         
@@ -35,16 +35,27 @@ class Auth
     {
         $response = $this->client->setRequest(new RevokeTokenRequest)->post($token);
 
-        $this->validateStatusCode($response);
+        Validation::validateStatusCode($response);
         
         return true;
     }
 
-    public function getUserInfo()
+    public function generateClientToken(): string
+    {
+        $response = $this->client->setRequest(new GenerateTokenRequest)->post();
+
+        Validation::validateStatusCode($response);
+        
+        $data = json_decode($response->getBody(), true);
+
+        return $data['client_token'];
+    }
+
+    public function getUserInfo(): array
     {
         $response = $this->client->setRequest(new UserInfoRequest)->get();
 
-        $this->validateStatusCode($response);
+        Validation::validateStatusCode($response);
 
         $data = json_decode($response->getBody(), true);
         
@@ -54,14 +65,5 @@ class Auth
         ];
 
         return $userInfo;
-    }
-
-    private function validateStatusCode($response)
-    {
-        if (Validation::is4xx($response->getStatusCode()) || Validation::is5xx($response->getStatusCode())) {
-            throw new Exception('Server Error');
-        }
-
-        return true;
     }
 }
