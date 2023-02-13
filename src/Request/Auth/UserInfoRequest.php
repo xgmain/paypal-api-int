@@ -1,6 +1,9 @@
 <?php
 
-namespace PayPal\Request;
+namespace PayPal\Request\Auth;
+
+use PayPal\Request\PayPalRequest;
+use PayPal\Request\RequestTokenInterface;
 
 class UserInfoRequest extends PayPalRequest implements RequestTokenInterface
 {

@@ -3,7 +3,7 @@
 namespace PayPal\Services;
 
 use PayPal\HttpClient\PayPalClient;
-use PayPal\Request\CreateOrderRequest;
+use PayPal\Request\Order\CreateOrderRequest;
 use PayPal\Utils\Validation;
 
 class Order

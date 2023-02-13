@@ -4,10 +4,10 @@ namespace PayPal\Services;
 
 use PayPal\HttpClient\PayPalClient;
 use PayPal\Utils\Validation;
-use PayPal\Request\AuthTokenRequest;
-use PayPal\Request\RevokeTokenRequest;
-use PayPal\Request\UserInfoRequest;
-use PayPal\Request\GenerateTokenRequest;
+use PayPal\Request\Auth\AuthTokenRequest;
+use PayPal\Request\Auth\RevokeTokenRequest;
+use PayPal\Request\Auth\UserInfoRequest;
+use PayPal\Request\Auth\GenerateTokenRequest;
 
 class Auth
 {
@@ -33,7 +33,10 @@ class Auth
 
     public function revokeAuthToken(string $token): bool
     {
-        $response = $this->client->setRequest(new RevokeTokenRequest)->post($token);
+        $response = new RevokeTokenRequest;
+        $response->setToken($token);
+
+        $response = $this->client->setRequest($response)->post();
 
         Validation::validateStatusCode($response);
         

@@ -38,7 +38,7 @@ class PayPalClient
             throw new Exception('Bad method call');
         }
 
-        $body = $this->evaluateBody($params);
+        $body = $this->request->getBody();
         $uri = $this->request->getUri();
         $context = $this->request->getContext($body);
         // var_dump($uri, $context);
@@ -53,32 +53,6 @@ class PayPalClient
         $this->clientID = $setting['client_id']; 
         $this->clientSecret = $setting['client_secret']; 
         $this->appID = $setting['app_id']; 
-    }
-
-    private function evaluateBody(array $params)
-    {
-        if ($this->request instanceof AuthTokenRequest) {
-            $body = $this->request->getBody();
-        } 
-        
-        if ($this->request instanceof RevokeTokenRequest) {
-            $body = $this->request->getBody(...$params);
-        }
-
-        if ($this->request instanceof UserInfoRequest) {
-            $body = $this->request->getBody();
-        }
-
-        if ($this->request instanceof GenerateTokenRequest) {
-            $body = $this->request->getBody();
-        }
-
-        
-        if ($this->request instanceof CreateOrderRequest) {
-            $body = $this->request->getBody();
-        }
-
-        return $body;
     }
 
     public function setRequest(RequestTokenInterface $request): self
