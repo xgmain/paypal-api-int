@@ -39,7 +39,7 @@ class PayPalClient
         }
 
         $body = $this->request->getBody();
-        $uri = $this->request->getUri();
+        $uri = $this->request->getUri(...$params);
         $context = $this->request->getContext($body);
         // var_dump($uri, $context);
         return $this->httpClient->request(strtoupper($method), $uri, $context);
