@@ -8,6 +8,7 @@ use PayPal\Config\GlobleConfig;
 use GuzzleHttp\Client;
 use PayPal\Request\RequestTokenInterface;
 use PayPal\Request\AuthTokenRequest;
+use PayPal\Request\CreateOrderRequest;
 use PayPal\Request\RevokeTokenRequest;
 use PayPal\Request\UserInfoRequest;
 use PayPal\Request\GenerateTokenRequest;
@@ -40,7 +41,7 @@ class PayPalClient
         $body = $this->evaluateBody($params);
         $uri = $this->request->getUri();
         $context = $this->request->getContext($body);
-        var_dump($uri, $context);
+        // var_dump($uri, $context);
         return $this->httpClient->request(strtoupper($method), $uri, $context);
     }
 
@@ -54,7 +55,7 @@ class PayPalClient
         $this->appID = $setting['app_id']; 
     }
 
-    private function evaluateBody(array $params): string
+    private function evaluateBody(array $params)
     {
         if ($this->request instanceof AuthTokenRequest) {
             $body = $this->request->getBody();
@@ -69,6 +70,11 @@ class PayPalClient
         }
 
         if ($this->request instanceof GenerateTokenRequest) {
+            $body = $this->request->getBody();
+        }
+
+        
+        if ($this->request instanceof CreateOrderRequest) {
             $body = $this->request->getBody();
         }
 

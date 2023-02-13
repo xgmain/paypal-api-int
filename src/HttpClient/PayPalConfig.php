@@ -13,6 +13,7 @@ class PayPalConfig
             'client_id'         => 'AXDr1VlddOJri0edvMZfgdZnhAE-5f_j1s0aH8ntdoGWkZDYylKBTRp-wCHTauhzFGQBNKm-792YbT00',
             'client_secret'     => 'EFjtCEomM94AvQZF6MjOse-uQ35W0kXLPhDjeXJZIIogUlWPJTMES2-1wxChaU8taP9cliT5UAsaA7fT',
             'app_id'            => 'Default Application',
+            'accessToken'       => 'A21AAJ0mjoIoH_blO-dnnNF2cJXZP6ZGrPEIlu-AXlKe2bLE19sSjBDdEww4kBkw90ztZ1t9DzrJuFwyzaOzK3_R6YRwkd2fg',
         ],
         'live' => [
             'api_url' => 'https://api-m.sandbox.paypal.com',

@@ -17,10 +17,25 @@ class Order
 
     public function createOrder()
     {
-        $response = $this->client->setRequest(new CreateOrderRequest)->post();
+        $jsonBody = [
+            "intent" => "CAPTURE",
+            "purchase_units" => [
+                [
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => "100.00"
+                    ]
+                ]
+            ]
+        ];
+
+        $request = new CreateOrderRequest;
+        $request->setBody($jsonBody);
+
+        $response = $this->client->setRequest($request)->post();
 
         Validation::validateStatusCode($response);
         
-        $data = json_decode($response->getBody(), true);
+        return json_decode($response->getBody(), true);
     }
 }
